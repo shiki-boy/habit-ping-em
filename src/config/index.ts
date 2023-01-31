@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-config({ path: '.env' });
+config({ path: ".env" });
 
 export const CREDENTIALS = process.env.CREDENTIALS === "true";
 export const {
@@ -12,4 +12,6 @@ export const {
   LOG_FORMAT,
   LOG_DIR,
   ORIGIN,
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
 } = process.env;

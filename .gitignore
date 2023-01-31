@@ -1,6 +1,6 @@
 node_modules
 .vscode
-.pnpm_store
+.pnpm-store
 .cache/
 .eslintcache
 .pnpm-debug.log*
