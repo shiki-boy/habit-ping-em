@@ -1,13 +1,17 @@
+import { NextFunction, Request, Response } from "express";
 import { CreateGoalDto } from "../dtos/goal/create-goal.dto";
 import GoalService from "@/services/goal.service";
-import { NextFunction, Request, Response } from "express";
 
 class GoalController {
   public goalService = new GoalService();
 
-  public listGoals = (req: Request, res: Response, next: NextFunction) => {
+  public listGoals = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const data = this.goalService.listGoals();
+      const data = await this.goalService.listGoals();
 
       res.status(200).json({ data });
     } catch (error) {
