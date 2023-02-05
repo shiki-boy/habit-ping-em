@@ -20,7 +20,11 @@ const authenticate = function (
         next();
       }
     })
-    .catch((err) => res.status(401).send());
+    .catch((err) =>
+      res
+        .status(401)
+        .json({ message: "No authentication credentials provided" })
+    );
 };
 
 export default authenticate;

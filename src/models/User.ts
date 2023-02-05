@@ -47,22 +47,19 @@ userSchema.methods.generateAuthToken = function () {
 
   const token = jwt.sign(jwtPayload, SECRET_KEY, signOptions).toString();
 
-  console.log(token);
-
   return token;
 };
 
 userSchema.statics.findByToken = function (token: string): Promise<User> {
   const user = this; // eslint-disable-line @typescript-eslint/no-this-alias
-
   const verifyOptions: jwt.VerifyOptions = {
-    algorithms: ["RS256"],
+    algorithms: ["HS256"],
   };
 
   try {
     const decoded = jwt.verify(
       token,
-      "MYSECRET",
+      SECRET_KEY,
       verifyOptions
     ) as CustomTokenPayload;
 

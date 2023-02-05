@@ -4,6 +4,7 @@ import { Router } from "express";
 import { Routes } from "@interfaces/routes.interface";
 import AuthController from "@/controllers/auth.controller";
 import { LoginFormBody } from "@/dtos/auth/login.dto";
+import authenticate from "@/middlewares/authenticate";
 
 class AuthRoute implements Routes {
   public path = "/auth";
@@ -25,6 +26,12 @@ class AuthRoute implements Routes {
       `${this.path}/register`,
       validateRequest({ body: SignupFormBody }),
       this.authController.register
+    );
+
+    this.router.get(
+      `${this.path}/user/info`,
+      authenticate,
+      this.authController.userInfo
     );
   }
 }
