@@ -3,8 +3,8 @@ import { Goal, User } from "./../interfaces/models.interface";
 import goalModel from "@/models/Goal";
 
 class GoalService {
-  public async listGoals(): Promise<Goal[]> {
-    return goalModel.find();
+  public async listGoals(user: User): Promise<Goal[]> {
+    return goalModel.find({ user });
   }
 
   public async create(data: CreateGoalDto, user: User): Promise<Goal> {

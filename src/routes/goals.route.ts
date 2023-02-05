@@ -16,7 +16,11 @@ class GoalsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.goalController.listGoals);
+    this.router.get(
+      `${this.path}`,
+      authenticate,
+      this.goalController.listGoals
+    );
 
     this.router.post(
       `${this.path}/create`,
