@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CreateGoalDto } from "../dtos/goal/create-goal.dto";
 import GoalService from "@/services/goal.service";
+import { RequestWithUser } from "@/interfaces/utils.interface";
 
 class GoalController {
   public goalService = new GoalService();
@@ -20,13 +21,13 @@ class GoalController {
   };
 
   public createGoal = async (
-    req: Request,
+    req: RequestWithUser,
     res: Response,
     next: NextFunction
   ) => {
     try {
       const goalData: CreateGoalDto = req.body;
-      const newGoal = await this.goalService.create(goalData);
+      const newGoal = await this.goalService.create(goalData, req.user);
       res.json({ newGoal });
     } catch (error) {
       next(error);

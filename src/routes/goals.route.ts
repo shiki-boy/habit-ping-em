@@ -1,8 +1,10 @@
-import { CreateGoalObject } from "./../dtos/goal/create-goal.dto";
 import { Router } from "express";
+
+import { CreateGoalObject } from "@/dtos/goal/create-goal.dto";
 import { Routes } from "@interfaces/routes.interface";
 import GoalController from "@/controllers/goal.controller";
 import { validateRequest } from "@/middlewares/validateRequest.middleware";
+import authenticate from "@/middlewares/authenticate";
 
 class GoalsRoute implements Routes {
   public path = "/goals";
@@ -18,6 +20,7 @@ class GoalsRoute implements Routes {
 
     this.router.post(
       `${this.path}/create`,
+      authenticate,
       validateRequest({ body: CreateGoalObject }),
       this.goalController.createGoal
     );

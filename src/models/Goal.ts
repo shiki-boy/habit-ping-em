@@ -1,5 +1,6 @@
 import { model, Schema, Document } from "mongoose";
 import { Goal } from "@interfaces/models.interface";
+import userModel from "./User";
 
 export const habitNames = {
   W: "Work Out",
@@ -18,6 +19,8 @@ export const statusChoices = {
   P: "Pending",
   C: "Completed",
 };
+
+const ObjectId = Schema.Types.ObjectId;
 
 const goalSchema: Schema = new Schema(
   {
@@ -43,6 +46,17 @@ const goalSchema: Schema = new Schema(
     points: {
       type: Number,
       min: 0,
+    },
+    user: {
+      type: ObjectId,
+      ref: userModel,
+      required: true,
+      // validate: {
+      //   validator: (userId: string) => {
+      //     return false;
+      //   },
+      //   message: "No such user",
+      // },
     },
   },
   { timestamps: true }

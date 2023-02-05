@@ -1,6 +1,6 @@
 import { JwtPayload } from "jsonwebtoken";
 import { habitNames, statusChoices } from "./../models/Goal";
-import { Model } from "mongoose";
+import { Model, Schema } from "mongoose";
 
 interface BaseFields {
   _id: string;
@@ -31,6 +31,7 @@ export interface Goal extends BaseFields {
   points: number;
   date: Date;
   duration: number;
+  user: Schema.Types.ObjectId;
 }
 
 export interface CustomTokenPayload extends JwtPayload {
