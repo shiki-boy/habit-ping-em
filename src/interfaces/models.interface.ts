@@ -1,4 +1,6 @@
+import { JwtPayload } from "jsonwebtoken";
 import { habitNames, statusChoices } from "./../models/Goal";
+import { Model } from "mongoose";
 
 interface BaseFields {
   _id: string;
@@ -6,10 +8,20 @@ interface BaseFields {
   updatedAt: Date;
 }
 
-export interface User extends BaseFields {
+export interface IUser extends BaseFields {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  isActive: string;
+  isActive: boolean;
+}
+
+interface IUserMethods {
+  generateAuthToken: () => string;
+}
+
+export interface User extends Model<IUser, object, IUserMethods> {
+  findByToken: (token: string) => Promise<User>;
 }
 
 export interface Goal extends BaseFields {
@@ -19,4 +31,8 @@ export interface Goal extends BaseFields {
   points: number;
   date: Date;
   duration: number;
+}
+
+export interface CustomTokenPayload extends JwtPayload {
+  _id: string;
 }

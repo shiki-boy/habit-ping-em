@@ -1,8 +1,21 @@
-import { model, Schema, Document } from "mongoose";
-import { User } from "@interfaces/models.interface";
+import { model, Schema, Types } from "mongoose";
+import jwt from "jsonwebtoken";
 
-const userSchema: Schema = new Schema(
+import { User, CustomTokenPayload, IUser } from "@interfaces/models.interface";
+import { SECRET_KEY } from "@config";
+
+const ObjectId = (id: string) => new Types.ObjectId(id);
+
+const userSchema: Schema = new Schema<IUser, User>(
   {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -20,6 +33,47 @@ const userSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-const userModel = model<User & Document>("User", userSchema);
+userSchema.methods.generateAuthToken = function () {
+  const user = this; // eslint-disable-line @typescript-eslint/no-this-alias
+
+  const jwtPayload = {
+    _id: user._id.toHexString(),
+  };
+
+  const signOptions: jwt.SignOptions = {
+    expiresIn: "10h",
+    algorithm: "HS256",
+  };
+
+  const token = jwt.sign(jwtPayload, SECRET_KEY, signOptions).toString();
+
+  console.log(token);
+
+  return token;
+};
+
+userSchema.statics.findByToken = function (token: string): Promise<User> {
+  const user = this; // eslint-disable-line @typescript-eslint/no-this-alias
+
+  const verifyOptions: jwt.VerifyOptions = {
+    algorithms: ["RS256"],
+  };
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      "MYSECRET",
+      verifyOptions
+    ) as CustomTokenPayload;
+
+    return user.findOne({
+      _id: ObjectId(decoded._id),
+    });
+  } catch (error) {
+    return Promise.reject();
+  }
+};
+
+const userModel = model<IUser, User>("User", userSchema);
 
 export default userModel;
